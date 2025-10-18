@@ -2,72 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Vote Now</title>
+<title>Voting Dashboard</title>
 <style>
 body {
+    background: #f5f5f5;
     font-family: 'Poppins', sans-serif;
-    background: #FAFAFA;
-    padding: 40px;
-    text-align: center;
+    margin: 0;
 }
-.cand-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 25px;
-    margin-top: 40px;
+header {
+    background: linear-gradient(135deg, #4DC0B5, #56C596);
+    color: white; padding: 20px; text-align: center;
 }
-.cand-card {
-    background: white;
-    border-radius: 14px;
-    padding: 25px;
-    width: 220px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-    transition: 0.3s ease;
-}
-.cand-card:hover {
-    transform: translateY(-6px);
+.container { padding: 40px; text-align: center; }
+.card {
+    background: white; padding: 25px; border-radius: 10px;
+    margin: 15px auto; width: 300px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
 }
 button {
-    background: #3AAE85;
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
+    background: #56C596; border: none; color: white; padding: 10px 15px;
+    border-radius: 8px; cursor: pointer; margin-top: 10px;
 }
-button:hover { background: #329b75; }
-.logout {
-    display: inline-block;
-    margin-top: 40px;
-    text-decoration: none;
-    background: #d9534f;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-}
-.logout:hover { background: #c9302c; }
-.message { margin-top: 15px; color: #00796B; font-weight: 500; }
+button:hover { background: #3AAE85; }
+p.msg { color: #00796B; font-weight: 600; }
+.logout { position: absolute; top: 20px; right: 25px; color: white; text-decoration: none; }
+.logout:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
-    <h2>Welcome, <?= htmlspecialchars($voter_name) ?>!</h2>
-    <?php if (!empty($msg)): ?><p class="message"><?= htmlspecialchars($msg) ?></p><?php endif; ?>
-
-    <form method="POST">
-        <div class="cand-grid">
-            <?php foreach ($candidates as $cand): ?>
-                <div class="cand-card">
-                    <h3><?= htmlspecialchars($cand['name']) ?></h3>
-                    <p><?= htmlspecialchars($cand['position']) ?></p>
-                    <button type="submit" name="candidate_id" value="<?= $cand['id'] ?>">Vote</button>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </form>
-
+<header>
+    <h2>Welcome, <?= htmlspecialchars($voter_name) ?> 👋</h2>
     <a href="<?= site_url('voter/logout') ?>" class="logout">Logout</a>
+</header>
+<div class="container">
+    <h3>Choose your candidate:</h3>
+    <?php if (!empty($msg)): ?><p class="msg"><?= $msg ?></p><?php endif; ?>
+    <?php foreach ($candidates as $c): ?>
+        <div class="card">
+            <h4><?= htmlspecialchars($c['name']) ?></h4>
+            <p><?= htmlspecialchars($c['position']) ?></p>
+            <form method="POST">
+                <input type="hidden" name="candidate_id" value="<?= $c['id'] ?>">
+                <button type="submit">Vote</button>
+            </form>
+        </div>
+    <?php endforeach; ?>
+</div>
 </body>
 </html>

@@ -16,24 +16,19 @@
         justify-content: center;
         align-items: center;
     }
-
     h1 {
         font-size: 38px;
         font-weight: 700;
         color: #1d5c57;
         margin-bottom: 40px;
-        letter-spacing: 0.5px;
     }
-
     .login-buttons {
         display: flex;
         gap: 20px;
         flex-wrap: wrap;
         justify-content: center;
     }
-
     .login-buttons a {
-        display: inline-block;
         background-color: #7fd8c2;
         color: #fff;
         padding: 14px 32px;
@@ -44,28 +39,15 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
     }
-
     .login-buttons a:hover {
         background-color: #54c1a9;
         transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
-
     footer {
         position: absolute;
         bottom: 15px;
         font-size: 13px;
         color: #78948f;
-    }
-
-    @media (max-width: 600px) {
-        h1 {
-            font-size: 28px;
-            text-align: center;
-        }
-        .login-buttons a {
-            width: 80%;
-        }
     }
 </style>
 </head>

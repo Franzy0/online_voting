@@ -1,7 +1,7 @@
 <?php
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
-class admin_controller extends Controller {
+class Admin_controller extends Controller {
 
     public function __construct() {
         parent::__construct();
@@ -9,13 +9,12 @@ class admin_controller extends Controller {
         session_start();
     }
 
-    // Admin login page
     public function login() {
         $msg = '';
 
-        if ($this->io->post('username') && $this->io->post('password')) {
-            $username = trim($this->io->post('username'));
-            $password = trim($this->io->post('password'));
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $username = trim($_POST['username']);
+            $password = trim($_POST['password']);
 
             if ($this->Admin_model->verify_login($username, $password)) {
                 $_SESSION['admin'] = $username;
@@ -28,7 +27,6 @@ class admin_controller extends Controller {
         $this->call->view('admin_login', ['msg' => $msg]);
     }
 
-    // Dashboard page
     public function dashboard() {
         if (!isset($_SESSION['admin'])) {
             redirect('admin/login');
@@ -44,12 +42,8 @@ class admin_controller extends Controller {
         $this->call->view('admin_dashboard', $data);
     }
 
-    // Logout
     public function logout() {
         session_destroy();
         redirect('admin/login');
     }
-
-    
 }
-?>

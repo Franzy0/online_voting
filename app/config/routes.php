@@ -44,16 +44,19 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 */
 
 $router->get('/', 'Welcome::index');
-$route['admin/login'] = 'admin_controller/login';
-$route['admin/dashboard'] = 'admin_controller/dashboard';
-$route['admin/logout'] = 'admin_controller/logout';
-// Voter Routes
-// Voter Routes
-$routes->get('voter/login', 'voter_controller@login');
-$routes->post('voter/login', 'voter_controller@login');
-$routes->get('voter/dashboard', 'voter_controller@dashboard');
-$routes->post('voter/dashboard', 'voter_controller@dashboard');
-$routes->get('voter/logout', 'voter_controller@logout');
 
-$routes->get('/', 'home_controller@index');
 
+
+$router->get('', 'home_controller@index');
+
+// Admin routes
+$router->get('admin/login', 'admin_controller@login');
+$router->post('admin/login', 'admin_controller@login');
+$router->get('admin/dashboard', 'admin_controller@dashboard');
+$router->get('admin/logout', 'admin_controller@logout');
+
+// Voter routes
+$router->get('voter/login', 'voter_controller@login');
+$router->post('voter/login', 'voter_controller@login');
+$router->get('voter/dashboard', 'voter_controller@dashboard');
+$router->get('voter/logout', 'voter_controller@logout');

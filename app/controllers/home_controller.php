@@ -1,13 +1,8 @@
 <?php
-class Home_controller extends Controller
-{
-    public function __construct()
-    {
-        parent::__construct();
-    }
+defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
-    public function index()
-    {
+class Home_controller extends Controller {
+    public function index() {
         $this->call->view('home');
     }
 }
