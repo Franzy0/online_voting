@@ -45,11 +45,10 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 $router->get('/', 'VoterController::login');
 
 
-$router->match('/admin/login', 'AdminController::login', ['GET', 'POST']);
-$router->get('/admin/dashboard', 'AdminController::dashboard');
-$router->get('/admin/logout', 'AdminController::logout');
+$router->match('admin/login', 'AdminController::login', ['GET', 'POST']);
+$router->get('admin/dashboard', 'AdminController::dashboard');
+$router->get('admin/logout', 'AdminController::logout');
 
-
-$router->match('/voter/login', 'VoterController::login', ['GET', 'POST']);
-$router->match('/voter/vote', 'VoterController::vote', ['GET', 'POST']);
-$router->get('/voter/logout', 'VoterController::logout');
+$router->match('/voter/login', 'voter/Voter::login', ['GET', 'POST']);
+$router->get('/voter/dashboard', 'voter/Voter::dashboard');
+$router->get('/voter/logout', 'voter/Voter::logout');

@@ -1,74 +1,74 @@
 <?php
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
-class VoterController extends Controller
+class Voter extends Controller
 {
     public function __construct()
     {
         parent::__construct();
-        $this->call->library('session');
         $this->call->model('VoterModel');
+        $this->call->library('session');
     }
 
-    // Voter Login Page
+    // -------------------------------
+    // LOGIN PAGE (GET + POST)
+    // -------------------------------
     public function login()
     {
-        // Only handle login when form is POSTed
-        if ($this->io->method() === 'post') {
-            $voter_id = $this->io->post('voter_id');
+        // If already logged in, redirect to dashboard
+        if ($this->session->has('voter')) {
+            redirect('voter/dashboard');
+            return;
+        }
+
+        // Handle POST request (form submit)
+        if ($this->io->post('email') && $this->io->post('password')) {
+            $email = $this->io->post('email');
             $password = $this->io->post('password');
 
-            $voter = $this->VoterModel->check_login($voter_id, $password);
+            // Check if valid voter
+            $voter = $this->VoterModel->get_voter_by_email($email);
 
-            if ($voter) {
-                $this->session->set_userdata('voter_id', $voter['id']);
-                redirect('voter/vote');
+            if ($voter && password_verify($password, $voter['password'])) {
+                // Save to session
+                $this->session->set('voter', [
+                    'id' => $voter['id'],
+                    'fullname' => $voter['fullname'],
+                    'email' => $voter['email']
+                ]);
+
+                redirect('voter/dashboard');
             } else {
-                $data['error'] = "Invalid Voter ID or Password.";
+                $data['error'] = 'Invalid email or password.';
                 $this->call->view('voter/login', $data);
                 return;
             }
         }
 
-        // Show login page for GET or after failure
+        // Default: show login page
         $this->call->view('voter/login');
     }
 
-    // Voting Page
-    public function vote()
+    // -------------------------------
+    // DASHBOARD PAGE
+    // -------------------------------
+    public function dashboard()
     {
-        if (!$this->session->has_userdata('voter_id')) {
+        if (!$this->session->has('voter')) {
             redirect('voter/login');
+            return;
         }
 
-        $voter_id = $this->session->userdata('voter_id');
-
-        // Only process when form is POSTed
-        if ($this->io->method() === 'post') {
-            // use io->post to read candidate_id safely (since method is POST)
-            $candidate_id = $this->io->post('candidate_id');
-
-            $has_voted = $this->VoterModel->has_voted($voter_id);
-            if ($has_voted) {
-                $data['message'] = "You have already voted.";
-            } else {
-                $this->VoterModel->submit_vote($voter_id, $candidate_id);
-
-                // Optionally update voters.has_voted flag
-                $this->VoterModel->mark_as_voted($voter_id);
-
-                $data['message'] = "Your vote has been successfully recorded.";
-            }
-        }
-
-        $data['candidates'] = $this->VoterModel->get_candidates();
-        $this->call->view('voter/vote', $data);
+        $data['voter'] = $this->session->get('voter');
+        $this->call->view('voter/dashboard', $data);
     }
 
-    // Voter Logout
+    // -------------------------------
+    // LOGOUT
+    // -------------------------------
     public function logout()
     {
-        $this->session->unset_userdata('voter_id');
+        $this->session->destroy();
         redirect('voter/login');
     }
 }

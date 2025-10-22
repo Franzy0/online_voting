@@ -59,7 +59,7 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
 
 $database['main'] = array(
-    'driver'    => 'mysqli',       // Use mysqli for MySQL (default in WAMP)
+    'driver'    => 'mysql',       // Use mysqli for MySQL (default in WAMP)
     'hostname'  => 'localhost',    // localhost for WAMP
     'port'      => '3309',         // default MySQL port
     'username'  => 'root',         // default WAMP username

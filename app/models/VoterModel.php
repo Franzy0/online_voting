@@ -3,42 +3,25 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
 class VoterModel extends Model
 {
-    // Check login credentials
-    public function check_login($voter_id, $password)
+    protected $table = 'voters'; // your table name
+
+    public function get_voter_by_email($email)
     {
-        $this->db->where('voter_id', $voter_id);
-        $this->db->where('password', $password);
-        return $this->db->get('voters')->row_array();
+        return $this->db->table($this->table)
+                        ->where('email', $email)
+                        ->get()
+                        ->row_array();
     }
 
-    // Get all candidates
-    public function get_candidates()
+    public function register_voter($data)
     {
-        return $this->db->get('candidates')->result_array();
+        // Example for registration, if needed later
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        return $this->db->table($this->table)->insert($data);
     }
 
-    // Check if voter already voted
-    public function has_voted($voter_id)
+    public function get_all_voters()
     {
-        $this->db->where('voter_id', $voter_id);
-        $vote = $this->db->get('votes')->row_array();
-        return $vote ? true : false;
+        return $this->db->table($this->table)->get_all();
     }
-
-    // Save vote to DB
-    public function submit_vote($voter_id, $candidate_id)
-    {
-        $data = [
-            'voter_id' => $voter_id,
-            'candidate_id' => $candidate_id,
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-        return $this->db->insert('votes', $data);
-    }
-    public function mark_as_voted($voter_id)
-    {
-        $this->db->where('id', $voter_id);
-        return $this->db->update('voters', ['has_voted' => 1]);
-    }
-
 }
